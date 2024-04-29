@@ -21,7 +21,7 @@ const Home = () => {
     const node = document.createElement('main')
 
     // colors.getColourById()
-    colors.getSchemeFromSeed()
+    // colors.getSchemeFromSeed()
 
     return {
         get

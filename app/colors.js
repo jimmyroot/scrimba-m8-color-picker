@@ -9,20 +9,20 @@ const Colors = () => {
 
     }) => {
 
-        const { seed, mode, count, format} = options
+        const { seed, mode, count, format } = options
         const endpoint = `${basePath}scheme`
         const query = `?hex=${seed}&mode=${mode}&count=${count}&format=${format}`
+        const headers = { method: 'GET' }
 
         try {
-            const options = { method: 'GET' }
-            const response = await fetch(`${endpoint}${query}`, options)
+            const response = await fetch(`${endpoint}${query}`, headers)
             const scheme = await response.json()
             console.log(scheme)
         }
-        catch (error) {
+        catch (error) { 
             console.error('Error', error)
         }
-
+        
     }
 
     const getColorById = async ( id = '390099' ) => {
@@ -43,38 +43,11 @@ const Colors = () => {
 
     }
 
-    const getSchemePicker = () => {
-        const html = `
-            <form>
-                <label for="color">Color</label>
-                <input type="color" id="label" name="label">
-                <label for="mode">Mode</label>
-                <select id="mode" name="mode">
-                    ${modes.map(mode => `<option value="${mode}">${mode}</option>`).join('')}
-                </select>
-                <button>Get scheme</button>
-            </form>
-        `
-        return html
-    }
-
     const basePath = `https://www.thecolorapi.com/`
-
-    const modes = [
-        'monochrome',
-        'monochrome-dark',
-        'monochrome-light',
-        'analogic',
-        'complement',
-        'analogic-complement',
-        'triad',
-        'quad'
-    ]
 
     return {
         getSchemeFromSeed,
         getColorById,
-        getSchemePicker
     }
 }
 

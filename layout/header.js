@@ -1,20 +1,13 @@
-import { colors } from '../app/colors'
+import { picker } from '../components/picker'
 
 const Header = () => {
 
     const render = () => {
-        const html = `
-            ${colors.getSchemePicker()}
-        `
-        return html
-    }
-
-    const refresh = () => {
-        node.innerHTML = render()
+        node.appendChild(picker.get())
     }
 
     const get = () => {
-        refresh()
+        render()
         return node
     }
 
