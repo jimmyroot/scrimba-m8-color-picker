@@ -1,20 +1,14 @@
 import { colors } from '../app/colors'
+import { picker } from '../components/picker'
 
 const Home = () => {
 
     const render = () => {
-        const html = `
-           <p>body</p>
-        `
-        return html
-    }
-
-    const refresh = () => {
-        node.innerHTML = render()
+        node.appendChild(picker.get())
     }
 
     const get = () => {
-        refresh()
+        render()
         return node
     }
 
