@@ -1,23 +1,22 @@
-const Colors = () => {
+const Palette = () => {
 
     const getSchemeFromSeed = async ( options = {
 
         seed: '390099',
         mode: 'complement',
-        count: 5,
-        format: 'json'
+        count: 5
 
     }) => {
 
-        const { seed, mode, count, format } = options
+        const { seed, mode, count } = options
         const endpoint = `${basePath}scheme`
-        const query = `?hex=${seed}&mode=${mode}&count=${count}&format=${format}`
+        const query = `?hex=${seed}&mode=${mode}&count=${count}`
         const headers = { method: 'GET' }
 
         try {
-            const response = await fetch(`${endpoint}${query}`, headers)
+            const response = await fetch(`${endpoint}${query}&format=json`, headers)
             const scheme = await response.json()
-            console.log(scheme)
+            return scheme
         }
         catch (error) { 
             console.error('Error', error)
@@ -51,4 +50,4 @@ const Colors = () => {
     }
 }
 
-export const colors = Colors()
+export const palette = Palette()

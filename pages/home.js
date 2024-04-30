@@ -1,10 +1,11 @@
-import { colors } from '../app/colors'
 import { picker } from '../components/picker'
+import { swatch } from '../components/swatch'
 
 const Home = () => {
 
     const render = () => {
         node.appendChild(picker.get())
+        node.appendChild(swatch.get())
     }
 
     const get = () => {
@@ -13,9 +14,6 @@ const Home = () => {
     }
 
     const node = document.createElement('main')
-
-    // colors.getColourById()
-    // colors.getSchemeFromSeed()
 
     return {
         get
