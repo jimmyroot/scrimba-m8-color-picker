@@ -9,6 +9,12 @@ const SCHEME_MODES = [
         'quad'
 ]
 
-export {
-    SCHEME_MODES
+const PREFS = {
+    count: 5,
 }
+
+export {
+    SCHEME_MODES,
+    PREFS
+}
+

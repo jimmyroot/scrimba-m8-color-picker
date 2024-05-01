@@ -6,6 +6,7 @@ const Home = () => {
     const render = () => {
         node.appendChild(picker.get())
         node.appendChild(swatch.get())
+        swatch.registerEventListeners()
     }
 
     const get = () => {

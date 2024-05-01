@@ -17,11 +17,24 @@ const Palette = () => {
             const response = await fetch(`${endpoint}${query}&format=json`, headers)
             const scheme = await response.json()
             return scheme
+        } catch (error) { 
+            console.error('Error: ', error)
         }
-        catch (error) { 
-            console.error('Error', error)
+    }
+
+    const getSchemeFromPath = async path => {
+
+        const endpoint = basePath
+        const query = path.replace('/', '')
+        const headers = { method: 'GET' }
+
+        try {
+            const response = await fetch(`${endpoint}${query}&format=json`, headers)
+            const scheme = await response.json()
+            return scheme
+        } catch (error) {
+            console.error('Error: ', error)
         }
-        
     }
 
     const getColorById = async ( id = '390099' ) => {
@@ -34,18 +47,17 @@ const Palette = () => {
             const options = {method: 'GET'}
             const response = await fetch(path, options)
             const color = await response.json()
-            console.log(color)
-        }
-        catch (error) {
+            return color
+        } catch (error) {
             console.error('Error: ', error)
         }
-
     }
 
     const basePath = `https://www.thecolorapi.com/`
 
     return {
         getSchemeFromSeed,
+        getSchemeFromPath,
         getColorById,
     }
 }
