@@ -1,13 +1,37 @@
-import { palette } from "../data/palette"
-import { picker } from "./picker"
+import { generator } from "../data/generator"
+import { addBrightnessProps } from "../utils/utils"
 import { PREFS } from "../utils/constants"
 
 const Swatch = () => {
 
     // Default scheme when we load
-    let scheme = {}
-    let altSchemes = []
-    let schemeHistory = []
+    const colorSchemes = {
+        schemes: [],
+        currentIndex: 0,
+        new: function(newScheme, altSchemes) {
+            if (newScheme && altSchemes) this.schemes.unshift({
+                'scheme': newScheme, 
+                'altSchemes': altSchemes
+            })
+            this.currentIndex = 0
+            console.log(`index: ${this.currentIndex}`)
+            refresh()
+        },
+        back: function() {
+            if (this.currentIndex < this.schemes.length-1) {
+                this.currentIndex++
+                console.log(`index: ${this.currentIndex}`)
+            }
+            refresh()
+        },
+        forward: function() {
+            if (this.currentIndex > 0) {
+                this.currentIndex--
+                console.log(`index: ${this.currentIndex}`)
+            }
+            refresh()
+        }
+    }
 
     const registerEventListeners = () => {
         node.addEventListener('click', e => {
@@ -16,6 +40,7 @@ const Swatch = () => {
     }
 
     const handleClick = e => {
+        
         const execute = {
             select: async () => {
                 const { schemeData } = e.target.dataset
@@ -25,65 +50,47 @@ const Swatch = () => {
                     'mode': mode,
                     'count': PREFS.count
                 }
-                const newScheme = await palette.getSchemeFromSeed(options)
-                setScheme(newScheme)
-                
+                const newScheme = await generator.getSchemeFromSeed(options)
+                const altSchemes = await generator.getAlternativeSchemes(newScheme)
+                setScheme(newScheme, altSchemes)
             }
         }
         const { type } = e.target.dataset
         if (type && execute[type]) execute[type]()
     }
 
-
-    // Proxy trap handlers
-    const handleScheme = {
-      set: (target, prop, val) => {
-        Reflect.set(target, prop, val)
-        if (prop === 'colors') refresh()
-        return true
-      },
-      get: (target, prop) => {
-        return Reflect.get(target, prop)
-      }
-    }
-
-    // Set up a proxy to 'intercept' the scheme objects functions, so we can auto re-render
-    // every time a new scheme is generated. I know there's easier ways 
-    // (like manually calling refresh) but wanted to explore this as thought 
-    // it was cool
-    const schemeProxy = new Proxy(scheme, handleScheme)
-
-    const setScheme = newScheme => {
-        const { colors, count, mode, seed } = newScheme
-
-        // The order is important: colors must be last, as this triggers a 
-        // re-render of the swatch component
-        schemeProxy.count = count
-        schemeProxy.mode = mode
-        schemeProxy.seed = seed
-        schemeProxy.colors = colors
-    }
-
-    const setAltSchemes = schemes => {
-        altSchemes = schemes
+    const setScheme = (newScheme, altSchemes) => {
+        addBrightnessProps(newScheme)
+        colorSchemes.new(newScheme, altSchemes)
     }
 
     const render = () => {
-        let html = `
-            ${renderMainSwatch(scheme.colors)}
-            ${renderAlternativeSwatches(altSchemes, scheme.mode)}
-        `
-        return html
+        if (colorSchemes.schemes[0]) {
+            try {
+                const index = colorSchemes.currentIndex
+                const { scheme, altSchemes } = colorSchemes.schemes[index]
+
+                let html = `
+                    ${renderMainSwatch(scheme.colors)}
+                    ${renderAlternativeSwatches(altSchemes, scheme.mode)}
+                `
+                return html
+            } catch (error) {
+                console.error('Error: ', error)
+            } finally {
+
+            }
+        }
     }
 
     const renderMainSwatch = colors => {
         try {
             let html = `<section class="section-main-swatch">`
             html += colors.map(color => {
-                console.log(color)
+                const txtColorClass = color.brightness >= 320 ? 'txt-overlay-dark' : 'txt-overlay-light'
                 return `<div style="background-color: ${color.hex.value}">
-                            <p>${color.hex.value}</p>
-                            <p>${color.name.value}</p>
+                            <p class="${txtColorClass}">${color.hex.value}</p>
+                            <p class="${txtColorClass}">${color.name.value}</p>
                         </div>`
             })
             .join('')
@@ -128,13 +135,14 @@ const Swatch = () => {
 
     const node = document.createElement('section')
     node.classList.add('section-swatches')
+   
 
     return {
         get,
         refresh,
         setScheme,
-        setAltSchemes,
-        registerEventListeners
+        registerEventListeners,
+        colorSchemes
     }
 }
 

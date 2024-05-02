@@ -20,6 +20,21 @@ body, html, * {
   div {
     width: 20%;
     height: 100%;
+
+    .txt-overlay-light,
+    .txt-overlay-dark {
+      font-weight: 700;
+    }
+
+    .txt-overlay-light {
+      mix-blend-mode:hard-light;
+      color: #EFEFEF;
+    }
+    
+    .txt-overlay-dark {
+      mix-blend-mode: hard-light;
+      color: #2A2A2A
+    }
   }
 
 }
@@ -30,8 +45,9 @@ body, html, * {
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 
   .mini-swatch {
+    justify-self: center;
     display: flex;
-    width: 120px;
+    width: 100%;
 
     div {
       height: 100px;

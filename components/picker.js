@@ -1,14 +1,27 @@
 import { SCHEME_MODES, PREFS } from '../utils/constants'
-import { palette } from '../data/palette'
+import { generator } from '../data/generator'
 import { swatch } from './swatch'
+import { randomHexVal } from '../utils/utils'
 
 const Picker = () => {
 
     let defaultSeed = ''
 
     const registerEventListeners = () => {
-        node.querySelector('button').addEventListener('click', () => {
-          handleGetSchemeClick()
+        node.addEventListener('click', e => {
+          const execute = {
+            get: () => {
+              handleGetSchemeClick()
+            },
+            back: () => {
+              swatch.colorSchemes.back()
+            },
+            forward: () => {
+              swatch.colorSchemes.forward()
+            }
+          }
+          const { type } = e.target.dataset
+          if (type && execute[type]) execute[type]()
         })
     }
     
@@ -20,19 +33,19 @@ const Picker = () => {
       }
 
       // Get the primary scheme
-      const newScheme = await palette.getSchemeFromSeed(options)
+      const newScheme = await generator.getSchemeFromSeed(options)
+      const altSchemes = await generator.getAlternativeSchemes(newScheme)
+      
+      // Showtime
+      swatch.setScheme(newScheme, altSchemes)
+    }
 
-      // Get the alternative schemes
-      const altSchemePaths = newScheme._links.schemes
-      const altSchemes = await Promise.all(Object.keys(altSchemePaths).map(async key => {
-        const path = altSchemePaths[key]
-        const scheme = await palette.getSchemeFromPath(path)
-        return scheme
-      }))
-      
-      swatch.setAltSchemes(altSchemes)
-      swatch.setScheme(newScheme)
-      
+    const setPickerValue = hex => {
+      node.querySelector('#seed').value = hex
+    }
+
+    const setModeValue = () => {
+
     }
 
     const render = () => {
@@ -46,7 +59,9 @@ const Picker = () => {
                         .map(mode => `<option value="${mode}">${mode}</option>`)
                         .join('')}
                 </select>
-                <button>Get scheme</button>
+                <button data-type="get">Get scheme</button>
+                <button data-type="back">Back</button>
+                <button data-type="forward">Forward</button>
 
         `
 
@@ -60,7 +75,22 @@ const Picker = () => {
 
     const get = () => {
         refresh()
+        initialize()
         return node
+    }
+
+    const initialize = async () => {
+      const options = {
+          'seed': randomHexVal(),
+          'mode': SCHEME_MODES[Math.floor(Math.random() * SCHEME_MODES.length)],
+          'count': PREFS.count
+      }
+      console.log(options)
+      node.querySelector('#seed').value = '#' + options.seed
+      node.querySelector('#mode').value = options.mode
+      const initScheme = await generator.getSchemeFromSeed(options)
+      const altSchemes = await generator.getAlternativeSchemes(initScheme)
+      swatch.setScheme(initScheme, altSchemes)
     }
 
     const node = document.createElement('div')

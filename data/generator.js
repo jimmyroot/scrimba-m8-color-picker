@@ -1,4 +1,4 @@
-const Palette = () => {
+const Generator = () => {
 
     const getSchemeFromSeed = async ( options = {
 
@@ -53,13 +53,28 @@ const Palette = () => {
         }
     }
 
+    const getAlternativeSchemes = async scheme => {
+        try {
+            const paths = scheme._links.schemes
+            const schemes = await Promise.all(
+                Object.keys(paths)
+                    .map(async key => {
+                        return await getSchemeFromPath(paths[key])
+            }))
+            return schemes
+        } catch (error) {
+            console.error('Error: ', error)
+        }
+    }
+
     const basePath = `https://www.thecolorapi.com/`
 
     return {
         getSchemeFromSeed,
         getSchemeFromPath,
         getColorById,
+        getAlternativeSchemes
     }
 }
 
-export const palette = Palette()
+export const generator = Generator()
