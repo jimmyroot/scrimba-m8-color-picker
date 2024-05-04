@@ -1,0 +1,19 @@
+input[type="color" i]::-webkit-color-swatch,
+input[type="color" i]::-moz-color-swatch {
+    border-radius: 50%;
+}
+
+
+.picker {
+    display: flex;
+    padding: .6em 0;
+}
+
+.btn-get-scheme {
+    display: block;
+    color: var(--txt-light);
+    background-color: var(--secondary);
+    border-radius: var(--br);
+    border: none;
+    padding: .75em 1.5em;
+}

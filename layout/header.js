@@ -4,10 +4,10 @@ const Header = () => {
         const html = `
             <div class="header-wrapper">
                 <div>
-                    <h1>Color Cult</h1>
+                    <h1 class="header-logo">Color Cult</h1>
                 </div>
                 <div>
-                    <ul id="menu">
+                    <ul class="header-menu" id="menu">
                         <li>
                             <a href="#">Tools</a>
                         </li>
@@ -15,7 +15,7 @@ const Header = () => {
                             <a href="#">Sign in</a>
                         </li>
                         <li>
-                            <a href="#">Sign up</a>
+                            <a class="sign-up" href="#">Sign up</a>
                         </li>
                     </ul>
                 </div>

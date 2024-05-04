@@ -59,7 +59,7 @@ const Picker = () => {
                         .map(mode => `<option value="${mode}">${mode}</option>`)
                         .join('')}
                 </select>
-                <button data-type="get">Get scheme</button>
+                <button class="btn-get-scheme" data-type="get">Get scheme</button>
                 <button data-type="back">Back</button>
                 <button data-type="forward">Forward</button>
 
@@ -94,7 +94,7 @@ const Picker = () => {
     }
 
     const node = document.createElement('div')
-
+    node.classList.add('picker')
     return {
         get
     }
