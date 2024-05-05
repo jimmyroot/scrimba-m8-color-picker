@@ -1,19 +1,84 @@
-input[type="color" i]::-webkit-color-swatch,
+.picker-wrapper {
+    font-size: .9rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: flex-end;
+    gap: 2em;
+    padding: .8em 1em;
+
+    div {
+        display: flex;
+        gap: .6em;
+        align-items: center;
+    }
+
+    div:first-child {
+        margin-right: auto;
+    }
+
+    .btn-back, .btn-forward {
+        background: none;
+        border: none;
+
+        & * {
+            pointer-events: none;
+        }
+    }
+
+    .select-mode {
+        width: 14em;
+        color: var(--secondary);
+        padding: .75em 1em;
+        border-radius: var(--br);
+        border: 1px solid #00000022;
+        background: url('/public/arrow.png');
+        background-repeat: no-repeat;   
+        background-size: 6%;
+        background-position: 92% 50%;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        appearance: none;
+        cursor: pointer;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    .btn-get-scheme {
+        font-size: .9rem;
+        font-weight: 500;
+        display: block;
+        color: var(--txt-light);
+        background-color: var(--secondary);
+        border-radius: var(--br);
+        border: none;
+        padding: .75em 1.5em;
+        cursor: pointer;
+    }
+}
+
+input[type="color" i] {
+    border-radius: 50%;
+    inline-size: 30px;
+    block-size: 30px;
+    padding: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #00000022;
+    cursor: pointer;
+}
+
+input[type="color" i]::-webkit-color-swatch-wrapper {
+    padding: 1px;
+}
+
+input[type="color" i]::-webkit-color-swatch {
+    border-radius: 50%;
+    border: none;
+}
+
 input[type="color" i]::-moz-color-swatch {
     border-radius: 50%;
-}
-
-
-.picker {
-    display: flex;
-    padding: .6em 0;
-}
-
-.btn-get-scheme {
-    display: block;
-    color: var(--txt-light);
-    background-color: var(--secondary);
-    border-radius: var(--br);
     border: none;
-    padding: .75em 1.5em;
 }

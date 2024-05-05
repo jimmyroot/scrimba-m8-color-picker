@@ -50,19 +50,29 @@ const Picker = () => {
 
     const render = () => {
         const html = `
-            
-                <label for="color">Color</label>
-                <input type="color" id="seed" name="seed">
-                <label for="mode">Mode</label>
-                <select id="mode" name="mode">
-                    ${SCHEME_MODES
-                        .map(mode => `<option value="${mode}">${mode}</option>`)
-                        .join('')}
-                </select>
-                <button class="btn-get-scheme" data-type="get">Get scheme</button>
-                <button data-type="back">Back</button>
-                <button data-type="forward">Forward</button>
-
+          <div>
+            <button class="btn-back" data-type="back">
+              <i class='bx bx-chevron-left bx-md'></i>
+            </button>
+            <button class="btn-forward" data-type="forward">
+              <i class='bx bx-chevron-right bx-md'></i>
+            </button>
+          </div>
+          <div>
+            <label for="color">Color</label>
+            <input type="color" id="seed" name="seed">
+          </div>
+          <div>
+            <label for="mode">Mode</label>
+            <select class="select-mode" id="mode" name="mode">
+                ${SCHEME_MODES
+                    .map(mode => `<option value="${mode}">${mode}</option>`)
+                    .join('')}
+            </select>
+          </div>
+          <div>
+            <button class="btn-get-scheme" data-type="get">Get scheme</button>
+          </div>
         `
 
         return html
@@ -85,7 +95,7 @@ const Picker = () => {
           'mode': SCHEME_MODES[Math.floor(Math.random() * SCHEME_MODES.length)],
           'count': PREFS.count
       }
-      console.log(options)
+
       node.querySelector('#seed').value = '#' + options.seed
       node.querySelector('#mode').value = options.mode
       const initScheme = await generator.getSchemeFromSeed(options)
@@ -94,7 +104,7 @@ const Picker = () => {
     }
 
     const node = document.createElement('div')
-    node.classList.add('picker')
+    node.classList.add('picker-wrapper')
     return {
         get
     }

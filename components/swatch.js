@@ -87,10 +87,13 @@ const Swatch = () => {
         try {
             let html = `<section class="section-main-swatch">`
             html += colors.map(color => {
-                const txtColorClass = color.brightness >= 320 ? 'txt-overlay-dark' : 'txt-overlay-light'
-                return `<div style="background-color: ${color.hex.value}">
-                            <p class="${txtColorClass}">${color.hex.value}</p>
-                            <p class="${txtColorClass}">${color.name.value}</p>
+                const classSwatchTxt = color.brightness >= 320 ? 'txt-overlay-dark' : 'txt-overlay-light'
+                const colorHexValue = color.hex.value
+                const swatchDescrValue = color.hex.value.replace('#', '')
+                const swatchDescrName = color.name.value
+                return `<div class="swatch-bar" style="background-color: ${colorHexValue}">
+                            <p class="value ${classSwatchTxt}">${swatchDescrValue}</p>
+                            <p class="name ${classSwatchTxt}">${swatchDescrName}</p>
                         </div>`
             })
             .join('')
@@ -107,13 +110,19 @@ const Swatch = () => {
             html += altSchemes.map(scheme => {
                 if (scheme.mode === excludeMode) return
                 const divs = scheme.colors.map(color => {
-                    return `<div style="background-color: ${color.hex.value}"></div>`
+                    const hex = color.hex.value
+                    return `<div style="background-color: ${hex}"></div>`
                 })
                 .join('')
                 const mode = scheme.mode
                 const hex = (scheme.seed.hex.value).replace('#', '')
                 return `
-                    <div class="mini-swatch" data-type="select" data-scheme-data="${mode},${hex}">${divs}</div>
+                    <div class="mini-swatch-container" data-type="select" data-scheme-data="${mode},${hex}">
+                        <div class="mini-swatch">
+                            ${divs}
+                        </div>
+                        <p>${mode}</p>
+                    </div>
                 `
             })
             .join('')

@@ -1,0 +1,84 @@
+.section-swatches {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+  
+    .section-main-swatch {
+        display: flex;
+        flex-grow: 1;
+  
+        .swatch-bar {
+            width: 20%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 2em 0;
+
+            .txt-overlay-light {
+                mix-blend-mode:hard-light;
+                color: #EFEFEF;
+            }
+            
+            .txt-overlay-dark {
+                mix-blend-mode: hard-light;
+                color: #2A2A2A;
+            }
+
+            .value {
+                font-size: 1.75rem;
+                font-weight: 500;
+                letter-spacing: 2px;
+            }
+
+            .name {
+                opacity: .8;
+                font-size: .8rem;
+                letter-spacing: .4px;
+                font-weight: 300;
+                margin-top: 1em;
+            }
+        }
+    }
+
+    .section-mini-swatches {
+        display: grid;
+        gap: 1em;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        padding: 1em;
+  
+        .mini-swatch-container {
+
+            
+
+            justify-self: center;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        
+            .mini-swatch {
+                border-radius: var(--br);
+                overflow: hidden;
+                display: flex;
+
+                div {
+                    height: 100px;
+                    width: 20%;
+                    pointer-events: none;
+                }
+            }
+
+            p {
+                text-align: center;
+                font-size: .7rem;
+                margin-top: .5rem;
+            }
+
+            & * {
+                pointer-events: none;
+            }
+        }
+    } 
+  
+}

@@ -1,6 +1,7 @@
 :root {
     --primary: #0275FF;
     --secondary: #FF4D00;
-    --txt-light: #EEEEEE;
+    --txt-light: #F4F4F4;
     --br: 7px;
+    --divider: #00000022;
 }

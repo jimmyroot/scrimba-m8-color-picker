@@ -1,2 +1,8 @@
 @import '../components/picker.css';
 @import '../components/swatch.css';
+
+.main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}

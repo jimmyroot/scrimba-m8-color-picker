@@ -4,14 +4,14 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #00000022;
-    padding: .3em 0;
+    padding: .4em 1em;
 }
 
 .header-logo {
-    /* font-size: 3px; */
+
     font-family: Oswald, sans-serif;
     text-transform: uppercase;
-    padding: 0 .5em;
+
 }
 
 .header-menu {
@@ -19,7 +19,6 @@
     display: flex;
     align-items: center;
     gap: 2em;
-    padding: 0 1em;
     margin: 0;
 
     li {

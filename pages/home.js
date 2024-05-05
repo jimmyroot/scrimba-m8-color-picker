@@ -15,6 +15,7 @@ const Home = () => {
     }
 
     const node = document.createElement('main')
+    node.classList.add('main')
 
     return {
         get
