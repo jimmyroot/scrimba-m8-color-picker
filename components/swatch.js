@@ -91,8 +91,10 @@ const Swatch = () => {
                 const colorHexValue = color.hex.value
                 const swatchDescrValue = color.hex.value.replace('#', '')
                 const swatchDescrName = color.name.value
-                return `<div class="swatch-bar" style="background-color: ${colorHexValue}">
-                            <p class="value ${classSwatchTxt}">${swatchDescrValue}</p>
+                return `<div class="swatch-bar ${classSwatchTxt}" style="background-color: ${colorHexValue}">
+                            <p><i class='bx bx-heart bx-md'></i></p>
+                            <p><i class='bx bx-copy bx-md'></i></p>
+                            <p class="value">${swatchDescrValue}</p>
                             <p class="name ${classSwatchTxt}">${swatchDescrName}</p>
                         </div>`
             })

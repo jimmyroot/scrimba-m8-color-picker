@@ -3,7 +3,7 @@ const Footer = () => {
     const render = () => {
         const html = `
             <p>Color Cult</p>
-            <p>Copyright ©2024</p>
+            <p>Copyright Jimmy ©2024</p>
         `
         node.innerHTML = html
     }
