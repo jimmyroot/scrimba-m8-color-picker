@@ -1,6 +1,8 @@
 import { generator } from "../data/generator"
 import { addBrightnessProps } from "../utils/utils"
 import { PREFS } from "../utils/constants"
+import { isLowContrast } from "../utils/utils"
+import { picker } from "./picker"
 
 const Swatch = () => {
 
@@ -14,13 +16,12 @@ const Swatch = () => {
                 'altSchemes': altSchemes
             })
             this.currentIndex = 0
-            console.log(`index: ${this.currentIndex}`)
+            picker.enableButton('btnForward', false)
             refresh()
         },
         back: function() {
             if (this.currentIndex < this.schemes.length-1) {
                 this.currentIndex++
-                console.log(`index: ${this.currentIndex}`)
             }
             refresh()
         },
@@ -87,16 +88,26 @@ const Swatch = () => {
         try {
             let html = `<section class="section-main-swatch">`
             html += colors.map(color => {
-                const classSwatchTxt = color.brightness >= 320 ? 'txt-overlay-dark' : 'txt-overlay-light'
                 const colorHexValue = color.hex.value
-                const swatchDescrValue = color.hex.value.replace('#', '')
+                const classSwatchTxt = isLowContrast(colorHexValue) ? 'txt-dark' : ``
+                const swatchDescrValue = colorHexValue.replace(`#`, ``)
                 const swatchDescrName = color.name.value
-                return `<div class="swatch-bar ${classSwatchTxt}" style="background-color: ${colorHexValue}">
-                            <p><i class='bx bx-heart bx-md'></i></p>
-                            <p><i class='bx bx-copy bx-md'></i></p>
-                            <p class="value">${swatchDescrValue}</p>
-                            <p class="name ${classSwatchTxt}">${swatchDescrName}</p>
-                        </div>`
+                return `
+                    <div class="swatch-bar ${classSwatchTxt}" style="background-color: ${colorHexValue}">
+                        <p>
+                            <button class="btn"><i class='bx bx-heart bx-sm'></i></button>
+                        </p>
+                        <p>
+                        <button class="btn"><i class='bx bx-copy bx-sm'></i></button>
+                        </p>
+                        <p class="value $">
+                            ${swatchDescrValue}
+                        </p>
+                        <p class="name">
+                            ${swatchDescrName}
+                        </p>
+                    </div>
+                `
             })
             .join('')
             .concat('</section>')
@@ -136,6 +147,22 @@ const Swatch = () => {
     }
 
     const refresh = () => {
+        const index = colorSchemes.currentIndex
+        const length = colorSchemes.schemes.length
+        console.log(index, length)
+        if (index === 0 && length === 1) {
+            picker.enableButton('btnForward', false)
+            picker.enableButton('btnBack', false)
+        } else if (index === 0 && length > 1) {
+            picker.enableButton('btnForward', false)
+            picker.enableButton('btnBack', true)
+        } else if (index > 0 && index < length-1) {
+            picker.enableButton('btnForward', true)
+            picker.enableButton('btnBack', true)
+        } else {
+            picker.enableButton('btnForward', true)
+            picker.enableButton('btnBack', false)
+        }
         node.innerHTML = render()
     }
 

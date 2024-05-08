@@ -3,8 +3,8 @@ import { swatch } from '../components/swatch'
 
 const Home = () => {
 
-    const render = () => {
-        node.appendChild(picker.get())
+    const render = async () => {
+        node.appendChild(await picker.get())
         node.appendChild(swatch.get())
         swatch.registerEventListeners()
     }

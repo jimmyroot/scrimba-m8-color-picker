@@ -9,6 +9,10 @@ body, html, * {
   font-family: Inter, sans-serif;
 }
 
+button * {
+  pointer-events: none;
+}
+
 #app {
   height: 100vh;
   display: flex;

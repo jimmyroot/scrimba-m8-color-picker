@@ -8,6 +8,7 @@
         flex-grow: 1;
   
         .swatch-bar {
+            color: white;
             width: 20%;
             height: 100%;
             display: flex;
@@ -17,14 +18,8 @@
             align-items: center;
             padding: 2em 0;
 
-            .txt-overlay-light {
-                mix-blend-mode:hard-light;
-                color: #EFEFEF;
-            }
-            
-            .txt-overlay-dark {
-                mix-blend-mode: hard-light;
-                color: #2A2A2A;
+            .value, .name {
+                /* color: var(--txt-light); */
             }
 
             .value {
@@ -39,6 +34,33 @@
                 letter-spacing: .4px;
                 font-weight: 300;
             }
+
+            .btn {
+                color: inherit;
+                background: none;
+                font-weight: 300;
+                border-radius: var(--br);
+                border: none;
+                padding: .5em;
+                /* color: var(--txt-light); */
+                cursor: pointer;
+        
+                & * {
+                    pointer-events: none;
+                }
+        
+                &:hover {
+                    background-color: var(--btn-hover);
+                }
+        
+                &:active {
+                    background-color: var(--btn-active);
+                }
+            }
+        }
+        
+        .txt-dark {
+            color: black;
         }
     }
 
@@ -54,7 +76,7 @@
             flex-direction: column;
             width: 100%;
         
-            .mini-swatch {
+            .mini-swatch {  
                 border-radius: var(--br);
                 overflow: hidden;
                 display: flex;
@@ -64,11 +86,25 @@
                     width: 20%;
                     pointer-events: none;
                 }
+
+                
             }
 
+            &:hover p {
+                background-color: var(--btn-hover);
+            }
+
+            &:active p {
+                background-color: var(--btn-active);
+            }
+            
+
             p {
+                align-self: center;
                 text-align: center;
                 font-size: .7rem;
+                border-radius: var(--br);
+                padding: .3em .5em;
                 margin-top: .5rem;
             }
 

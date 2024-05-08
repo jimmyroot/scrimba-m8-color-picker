@@ -1,7 +1,7 @@
 import { SCHEME_MODES, PREFS } from '../utils/constants'
 import { generator } from '../data/generator'
 import { swatch } from './swatch'
-import { randomHexVal } from '../utils/utils'
+import { randomHexVal, isLowContrast } from '../utils/utils'
 
 const Picker = () => {
 
@@ -9,20 +9,27 @@ const Picker = () => {
 
     const registerEventListeners = () => {
         node.addEventListener('click', e => {
-          const execute = {
-            get: () => {
-              handleGetSchemeClick()
-            },
-            back: () => {
-              swatch.colorSchemes.back()
-            },
-            forward: () => {
-              swatch.colorSchemes.forward()
-            }
-          }
-          const { type } = e.target.dataset
-          if (type && execute[type]) execute[type]()
+          handleClick(e)
         })
+        node.querySelector('#seed').addEventListener('input', e => {
+          setButtonColor(e.target.value)
+        })
+    }
+  
+    const handleClick = e => {
+      const execute = {
+        get: () => {
+          handleGetSchemeClick()
+        },
+        back: () => {
+          swatch.colorSchemes.back()
+        },
+        forward: () => {
+          swatch.colorSchemes.forward()
+        }
+      }
+      const { type } = e.target.dataset
+      if (type && execute[type]) execute[type]()
     }
     
     const handleGetSchemeClick = async () => {
@@ -48,13 +55,38 @@ const Picker = () => {
 
     }
 
+    const enableButton = ( button, enable ) => {
+      const execute = {
+        btnBack: () => {
+          node.querySelector('#btn-back').disabled = !enable
+        },
+        btnForward: () => {
+          node.querySelector('#btn-forward').disabled = !enable
+        }
+      }
+
+      if (button && execute[button]) execute[button]()
+    }
+
+    const setButtonColor = color => {
+      const btnGetScheme = node.querySelector('button.btn-get-scheme')
+
+      if (isLowContrast(color)) {
+        btnGetScheme.classList.add(`dark`)
+      } else {
+        btnGetScheme.classList.remove('dark')
+      }
+
+      btnGetScheme.style.backgroundColor = color
+    }
+
     const render = () => {
         const html = `
           <div>
-            <button class="btn-back" data-type="back">
+            <button class="btn" id="btn-back" data-type="back">
               <i class='bx bx-chevron-left bx-md'></i>
             </button>
-            <button class="btn-forward" data-type="forward">
+            <button class="btn" id="btn-forward" data-type="forward">
               <i class='bx bx-chevron-right bx-md'></i>
             </button>
           </div>
@@ -71,7 +103,7 @@ const Picker = () => {
             </select>
           </div>
           <div>
-            <button class="btn-get-scheme" data-type="get">Get scheme</button>
+            <button class="btn-get-scheme" data-type="get"><span>Get scheme</span></button>
           </div>
         `
 
@@ -83,9 +115,9 @@ const Picker = () => {
         registerEventListeners()
     }
 
-    const get = () => {
+    const get = async () => {
         refresh()
-        initialize()
+        await initialize()
         return node
     }
 
@@ -95,18 +127,20 @@ const Picker = () => {
           'mode': SCHEME_MODES[Math.floor(Math.random() * SCHEME_MODES.length)],
           'count': PREFS.count
       }
-
+      console.log(options.seed)
       node.querySelector('#seed').value = '#' + options.seed
       node.querySelector('#mode').value = options.mode
       const initScheme = await generator.getSchemeFromSeed(options)
       const altSchemes = await generator.getAlternativeSchemes(initScheme)
       swatch.setScheme(initScheme, altSchemes)
+      setButtonColor(`#${options.seed}`)
     }
 
     const node = document.createElement('div')
     node.classList.add('picker-wrapper')
     return {
-        get
+        get,
+        enableButton
     }
 }
 

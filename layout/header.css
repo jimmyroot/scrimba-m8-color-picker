@@ -8,10 +8,9 @@
 }
 
 .header-logo {
-
+    color: var(--txt-dark);
     font-family: Oswald, sans-serif;
     text-transform: uppercase;
-
 }
 
 .header-menu {
@@ -27,6 +26,10 @@
             font-size: .9rem;
             font-weight: 500;
             text-decoration: none;
+
+            &:hover {
+                color: var(--primary);
+            }
         }
 
         a.sign-up {
@@ -35,7 +38,10 @@
             background-color: var(--primary);
             border-radius: var(--br);
             padding: .75em 1.5em;
+
+            &:hover {
+                background-color: var(--primary-darker);
+            }
         }
     }
-
 }
