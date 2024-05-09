@@ -8,19 +8,6 @@ const randomHexVal = () => {
     return hex
 }
 
-const addBrightnessProps = scheme => {
-    const { colors } = scheme
-    colors.forEach(color => {
-        const swatchColor = color.hex.value
-        let [ red, green, blue ] = swatchColor.replace('#', '').match(/[\s\S]{1,2}/g)
-        red = +('0x' + red)
-        green = +('0x' + green)
-        blue = +('0x' + blue)
-        const brightness = (red + green + blue)
-        color.brightness = brightness
-    })
-}
-
 const hexToHSL = hex => {
     // Convert hex to RGB first
     let r = 0, g = 0, b = 0;
@@ -89,4 +76,4 @@ const isLowContrast = hex => {
     }
 }
 
-export { randomHexVal, addBrightnessProps, isLowContrast }
+export { randomHexVal, isLowContrast }

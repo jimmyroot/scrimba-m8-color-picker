@@ -1,5 +1,4 @@
 import { generator } from "../data/generator"
-import { addBrightnessProps } from "../utils/utils"
 import { PREFS } from "../utils/constants"
 import { isLowContrast } from "../utils/utils"
 import { picker } from "./picker"
@@ -61,7 +60,6 @@ const Swatch = () => {
     }
 
     const setScheme = (newScheme, altSchemes) => {
-        addBrightnessProps(newScheme)
         colorSchemes.new(newScheme, altSchemes)
     }
 
