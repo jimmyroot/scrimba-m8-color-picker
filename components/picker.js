@@ -17,7 +17,7 @@ const Picker = () => {
     const handleClick = e => {
       const execute = {
         get: () => {
-          handleGetSchemeClick()
+          handleGetSchemeClick(e.target)
         },
         back: () => {
           swatch.colorSchemes.back()
@@ -30,7 +30,8 @@ const Picker = () => {
       if (type && execute[type]) execute[type]()
     }
     
-    const handleGetSchemeClick = async () => {
+    const handleGetSchemeClick = async getSchemeBtn => {
+      getSchemeBtn.disabled = true
       toggleSpinner()
 
       const options = {
@@ -45,14 +46,34 @@ const Picker = () => {
       
       // Showtime
       swatch.setScheme(newScheme, altSchemes)
+      getSchemeBtn.disabled = false
+    }
+
+    const initialize = async () => {
+      toggleSpinner()
+
+      const options = {
+          'seed': randomHexVal(),
+          'mode': SCHEME_MODES[Math.floor(Math.random() * SCHEME_MODES.length)],
+          'count': PREFS.count
+      }
+
+      setPickerValue(`#${options.seed}`)
+      setModeValue(options.mode)
+      setButtonColor(`#${options.seed}`)
+
+      const initScheme = await generator.getSchemeFromSeed(options)
+      const altSchemes = await generator.getAlternativeSchemes(initScheme)
+
+      swatch.setScheme(initScheme, altSchemes)
     }
 
     const setPickerValue = hex => {
       node.querySelector('#seed').value = hex
     }
 
-    const setModeValue = () => {
-
+    const setModeValue = mode => {
+      node.querySelector('#mode').value = mode
     }
 
     const enableButton = ( button, enable ) => {
@@ -71,11 +92,9 @@ const Picker = () => {
     const setButtonColor = color => {
       const btnGetScheme = node.querySelector('button.btn-get-scheme')
 
-      if (isLowContrast(color, 100)) {
-        btnGetScheme.classList.add(`dark`)
-      } else {
+      isLowContrast(color, 100) ?
+        btnGetScheme.classList.add(`dark`) : 
         btnGetScheme.classList.remove('dark')
-      }
 
       btnGetScheme.style.backgroundColor = color
     }
@@ -119,22 +138,6 @@ const Picker = () => {
         refresh()
         await initialize()
         return node
-    }
-
-    const initialize = async () => {
-      toggleSpinner()
-      const options = {
-          'seed': randomHexVal(),
-          'mode': SCHEME_MODES[Math.floor(Math.random() * SCHEME_MODES.length)],
-          'count': PREFS.count
-      }
-      console.log(options.seed)
-      node.querySelector('#seed').value = '#' + options.seed
-      node.querySelector('#mode').value = options.mode
-      const initScheme = await generator.getSchemeFromSeed(options)
-      const altSchemes = await generator.getAlternativeSchemes(initScheme)
-      swatch.setScheme(initScheme, altSchemes)
-      setButtonColor(`#${options.seed}`)
     }
 
     const node = document.createElement('div')

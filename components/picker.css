@@ -64,7 +64,6 @@
         font-weight: 500;
         display: block;
         color: white;
-        background-color: var(--secondary);
         border-radius: var(--br);
         border: 1px solid var(--divider);
         padding: .75em 1.5em;
@@ -74,7 +73,24 @@
             opacity: .95;
         }
 
-        /* span {
+        &:hover {
+            filter: brightness(.94)
+        }
+
+        &:active {
+            filter: brightness(.9)
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* 
+            Keeping this as it was interesting and will come back to it at some point...
+            ...provides a way to invert text color vs. the background
+
+            span {
             background: inherit;
             background-clip: text;
             -webkit-background-clip: text;

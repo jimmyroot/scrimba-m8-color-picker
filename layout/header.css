@@ -61,6 +61,7 @@
 
     .hamburger {
         display: none;
+        transform: scale(0.8);
     }
     
     @media (max-width: 640px) {

@@ -5,7 +5,8 @@ import { picker } from "./picker"
 
 const Swatch = () => {
 
-    // Default scheme when we load
+    // This is the main object that contains the schemes & alt schemes,
+    // and houses the functions to add new schemes and navigate back/forward
     const colorSchemes = {
         schemes: [],
         currentIndex: 0,
@@ -26,7 +27,6 @@ const Swatch = () => {
         forward: function() {
             if (this.currentIndex > 0) {
                 this.currentIndex--
-                console.log(`index: ${this.currentIndex}`)
             }
             refresh()
         }
@@ -39,8 +39,8 @@ const Swatch = () => {
     }
 
     const handleClick = e => {
-        
         const execute = {
+            // Selecting a color from mini swatch previews
             select: async () => {
                 const { schemeData } = e.target.dataset
                 const [ mode, seed ] = schemeData.split(',')
@@ -54,13 +54,11 @@ const Swatch = () => {
                 const altSchemes = await generator.getAlternativeSchemes(newScheme)
                 setScheme(newScheme, altSchemes)
             },
+            // Like a color
             like: () => {
-                const { hexId } = e.target.closest('div').dataset
-                const colorToLike = colorSchemes.schemes[0].scheme.colors
-                    .find(color => color.hex.value === hexId)
-                colorToLike.liked = !colorToLike.liked
-                refresh()
+                like(e.target)
             },
+            // Copy a color
             copy: () => {
                 copy(e.target)
             }
@@ -73,7 +71,7 @@ const Swatch = () => {
     // to be added to the schemes array
     const setScheme = (newScheme, altSchemes) => {
         if (newScheme && altSchemes) {
-            // Add a prop to keep track of likes
+            // Add a prop to keep track of likes, default it to false
             newScheme.colors.forEach(color => {
                 color.liked = false
             })
@@ -89,10 +87,17 @@ const Swatch = () => {
             setTimeout(() => {
                 target.innerHTML = `<i class='bx bx-copy bx-sm'></i>`
             }, 1000)
-            console.log(`Wrote ${hexId} to clipboard`)
         } catch (error) {
-
+            console.error(`Error: `, error)
         }
+    }
+
+    const like = target => {
+        const { hexId } = target.closest('div').dataset
+        const colorToLike = colorSchemes.schemes[0].scheme.colors
+            .find(color => color.hex.value === hexId)
+        colorToLike.liked = !colorToLike.liked
+        refresh()
     }
 
     const render = () => {
@@ -100,7 +105,6 @@ const Swatch = () => {
             try {
                 const index = colorSchemes.currentIndex
                 const { scheme, altSchemes } = colorSchemes.schemes[index]
-
                 let html = `
                     ${renderMainSwatch(scheme.colors)}
                     ${renderAlternativeSwatches(altSchemes, scheme.mode)}
@@ -180,12 +184,12 @@ const Swatch = () => {
         const length = colorSchemes.schemes.length
         const appEl = document.querySelector('#app')
 
-        // Turn off spinner if it's on
+        // Turn off spinner if it's active
         if (appEl.classList.contains('spinner')) {
             toggleSpinner()
         }
 
-        // Decide what buttons should be enabled
+        // Decide what buttons should be enabled (fwd/bk)
         if (index === 0 && length === 1) {
             picker.enableButton('btnForward', false)
             picker.enableButton('btnBack', false)

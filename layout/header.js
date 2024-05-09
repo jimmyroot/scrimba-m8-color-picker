@@ -4,6 +4,8 @@ const Header = () => {
         node.addEventListener('click', e => {
           handleClick(e)
         })
+        // Make sure the hamburger menu closes if the user
+        // clicks on the page behind it
         document.addEventListener('click', e => {  
             const menu = document.querySelector('.header-menu')     
             if (!e.target.closest('.header-menu') 
@@ -15,17 +17,16 @@ const Header = () => {
     }
   
     const handleClick = e => {
-      const execute = {
-        hamburger: () => {
-            console.log('burger')
-            toggleHamburger(e.target)
-        },
-        refresh: () => {
-            location.reload()
+        const execute = {
+            hamburger: () => {
+                toggleHamburger(e.target)
+            },
+            refresh: () => {
+                location.reload()
+            }
         }
-      }
-      const { type } = e.target.dataset
-      if (type && execute[type]) execute[type]()
+        const { type } = e.target.dataset
+        if (type && execute[type]) execute[type]()
     }
 
     const toggleHamburger = target => {
