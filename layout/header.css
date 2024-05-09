@@ -6,7 +6,7 @@
     border-bottom: 1px solid #00000022;
     padding: .4em 1em;
 
-    div {
+    div:first-child {
         display: flex;
         gap: .5em;
         align-items: center;
@@ -27,6 +27,9 @@
     }
     
     .header-menu {
+
+
+
         list-style-type: none;
         display: flex;
         align-items: center;
@@ -72,7 +75,7 @@
         .header-menu {
             position: fixed;
             top: 0;
-            left: 0;
+            left: -1px;
             width: 0;
             height: 100vh;
             flex-direction: column;
