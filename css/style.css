@@ -1,3 +1,4 @@
+/* Global and generic styles */
 *, *::before, *::after {
   box-sizing: inherit;
 }
@@ -17,6 +18,29 @@ button * {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  min-width: 320px; 
   overflow-y: scroll;
   scrollbar-gutter: stable;
+}
+
+@keyframes spinner {
+  to {
+      transform: rotate(360deg);
+  }
+}
+ 
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4em;
+  height: 4em;
+  margin-left: -2.5em;
+  margin-top: -2em;
+  border-radius: 50%;
+  border: 2px solid var(--spinner-main);
+  border-top-color: var(--primary);
+  animation: spinner .3s linear infinite;
 }

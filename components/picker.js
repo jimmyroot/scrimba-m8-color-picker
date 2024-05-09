@@ -1,11 +1,9 @@
 import { SCHEME_MODES, PREFS } from '../utils/constants'
 import { generator } from '../data/generator'
 import { swatch } from './swatch'
-import { randomHexVal, isLowContrast } from '../utils/utils'
+import { randomHexVal, isLowContrast, toggleSpinner } from '../utils/utils'
 
 const Picker = () => {
-
-    let defaultSeed = ''
 
     const registerEventListeners = () => {
         node.addEventListener('click', e => {
@@ -33,13 +31,15 @@ const Picker = () => {
     }
     
     const handleGetSchemeClick = async () => {
+      toggleSpinner()
+
       const options = {
         seed: node.querySelector('#seed').value.replace('#', ''),
         mode: node.querySelector('#mode').value,
         count: PREFS.count
       }
 
-      // Get the primary scheme
+      // Get the primary & alt schemes
       const newScheme = await generator.getSchemeFromSeed(options)
       const altSchemes = await generator.getAlternativeSchemes(newScheme)
       
@@ -71,7 +71,7 @@ const Picker = () => {
     const setButtonColor = color => {
       const btnGetScheme = node.querySelector('button.btn-get-scheme')
 
-      if (isLowContrast(color)) {
+      if (isLowContrast(color, 100)) {
         btnGetScheme.classList.add(`dark`)
       } else {
         btnGetScheme.classList.remove('dark')
@@ -82,7 +82,7 @@ const Picker = () => {
 
     const render = () => {
         const html = `
-          <div>
+          <div class="div-scheme-nav-btns">
             <button class="btn" id="btn-back" data-type="back">
               <i class='bx bx-chevron-left bx-md'></i>
             </button>
@@ -122,6 +122,7 @@ const Picker = () => {
     }
 
     const initialize = async () => {
+      toggleSpinner()
       const options = {
           'seed': randomHexVal(),
           'mode': SCHEME_MODES[Math.floor(Math.random() * SCHEME_MODES.length)],

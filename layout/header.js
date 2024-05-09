@@ -1,10 +1,44 @@
 const Header = () => {
 
+    const registerEventListeners = () => {
+        node.addEventListener('click', e => {
+          handleClick(e)
+        })
+        document.addEventListener('click', e => {  
+            const menu = document.querySelector('.header-menu')     
+            if (!e.target.closest('.header-menu') 
+                && menu.classList.contains('open') 
+                && e.target.id != 'hamburger')  { 
+                    toggleHamburger(e.target) 
+            }
+        })
+    }
+  
+    const handleClick = e => {
+      const execute = {
+        hamburger: () => {
+            console.log('burger')
+            toggleHamburger(e.target)
+        },
+        refresh: () => {
+            location.reload()
+        }
+      }
+      const { type } = e.target.dataset
+      if (type && execute[type]) execute[type]()
+    }
+
+    const toggleHamburger = target => {
+        target.classList.toggle('is-active')
+        node.querySelector('.header-menu').classList.toggle('open')
+    }
+
     const render = () => {
         const html = `
             <div class="header-wrapper">
                 <div>
-                    <h1 class="header-logo">Color Cult</h1>
+                    <img class="header-logo-img" src="/logo.png" alt="Color Cult logo, a circle containing a color swatch">
+                    <h1 class="header-logo" data-type="refresh">Color Cult</h1>
                 </div>
                 <div>
                     <ul class="header-menu" id="menu">
@@ -19,6 +53,11 @@ const Header = () => {
                         </li>
                     </ul>
                 </div>
+                <button class="hamburger hamburger--3dy" id="hamburger" type="button" data-type="hamburger">
+                    <span class="hamburger-box">
+                        <span class="hamburger-inner"></span>
+                    </span>
+                </button>
             </div>
             
         `
@@ -27,6 +66,7 @@ const Header = () => {
 
     const get = () => {
         render()
+        registerEventListeners()
         return node
     }
 

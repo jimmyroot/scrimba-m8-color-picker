@@ -55,10 +55,9 @@ const hexToHSL = hex => {
     return [ h, s, l ]
 }
 
-const isLowContrast = hex => {
+const isLowContrast = ( hex, baseLum ) => {
     const [ hue, sat, lum ] = hexToHSL(hex)
-    const compareToLuminance = 100
-    const contrastRatio = (lum + 0.05) / (compareToLuminance + 0.05)
+    const contrastRatio = (lum + 0.05) / (baseLum + 0.05)
     if (contrastRatio < 0.73) {
         if (hue >= 45 && hue <= 185) {
             if (sat < 38) { 
@@ -76,4 +75,14 @@ const isLowContrast = hex => {
     }
 }
 
-export { randomHexVal, isLowContrast }
+const toggleSpinner = () => {
+  const swatches = document.querySelector('.section-swatches')
+  const app = document.querySelector('#app')
+  if (swatches) swatches.classList.toggle('faded')
+  app.classList.toggle('spinner')
+  
+
+  
+}
+
+export { randomHexVal, isLowContrast, toggleSpinner }

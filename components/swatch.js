@@ -1,6 +1,6 @@
 import { generator } from "../data/generator"
 import { PREFS } from "../utils/constants"
-import { isLowContrast } from "../utils/utils"
+import { isLowContrast, toggleSpinner } from "../utils/utils"
 import { picker } from "./picker"
 
 const Swatch = () => {
@@ -15,7 +15,6 @@ const Swatch = () => {
                 'altSchemes': altSchemes
             })
             this.currentIndex = 0
-            picker.enableButton('btnForward', false)
             refresh()
         },
         back: function() {
@@ -50,17 +49,50 @@ const Swatch = () => {
                     'mode': mode,
                     'count': PREFS.count
                 }
+                toggleSpinner()
                 const newScheme = await generator.getSchemeFromSeed(options)
                 const altSchemes = await generator.getAlternativeSchemes(newScheme)
                 setScheme(newScheme, altSchemes)
+            },
+            like: () => {
+                const { hexId } = e.target.closest('div').dataset
+                const colorToLike = colorSchemes.schemes[0].scheme.colors
+                    .find(color => color.hex.value === hexId)
+                colorToLike.liked = !colorToLike.liked
+                refresh()
+            },
+            copy: () => {
+                copy(e.target)
             }
         }
         const { type } = e.target.dataset
         if (type && execute[type]) execute[type]()
     }
 
+    // Here we can manipulate the object in some way before passing it to the colorSchemes.new() function
+    // to be added to the schemes array
     const setScheme = (newScheme, altSchemes) => {
-        colorSchemes.new(newScheme, altSchemes)
+        if (newScheme && altSchemes) {
+            // Add a prop to keep track of likes
+            newScheme.colors.forEach(color => {
+                color.liked = false
+            })
+            colorSchemes.new(newScheme, altSchemes)
+        }
+    }
+
+    const copy = async target => {
+        const { hexId } = target.closest('div').dataset
+        try {
+            await navigator.clipboard.writeText(hexId);
+            target.innerHTML = `<i class='bx bxs-check-square bx-sm'></i>`
+            setTimeout(() => {
+                target.innerHTML = `<i class='bx bx-copy bx-sm'></i>`
+            }, 1000)
+            console.log(`Wrote ${hexId} to clipboard`)
+        } catch (error) {
+
+        }
     }
 
     const render = () => {
@@ -76,8 +108,6 @@ const Swatch = () => {
                 return html
             } catch (error) {
                 console.error('Error: ', error)
-            } finally {
-
             }
         }
     }
@@ -87,16 +117,17 @@ const Swatch = () => {
             let html = `<section class="section-main-swatch">`
             html += colors.map(color => {
                 const colorHexValue = color.hex.value
-                const classSwatchTxt = isLowContrast(colorHexValue) ? 'txt-dark' : ``
+                const classSwatchTxt = isLowContrast(colorHexValue, 90) ? 'txt-dark' : ``
                 const swatchDescrValue = colorHexValue.replace(`#`, ``)
                 const swatchDescrName = color.name.value
+                const iconHeart = color.liked ? `<i class='bx bxs-heart bx-sm'></i>` : `<i class='bx bx-heart bx-sm'></i>`
                 return `
-                    <div class="swatch-bar ${classSwatchTxt}" style="background-color: ${colorHexValue}">
+                    <div class="swatch-bar ${classSwatchTxt}" data-hex-id="${colorHexValue}" style="background-color: ${colorHexValue}">
                         <p>
-                            <button class="btn"><i class='bx bx-heart bx-sm'></i></button>
+                            <button class="btn" data-type="like">${iconHeart}</button>
                         </p>
                         <p>
-                        <button class="btn"><i class='bx bx-copy bx-sm'></i></button>
+                        <button class="btn" data-type="copy"><i class='bx bx-copy bx-sm'></i></button>
                         </p>
                         <p class="value $">
                             ${swatchDescrValue}
@@ -147,7 +178,14 @@ const Swatch = () => {
     const refresh = () => {
         const index = colorSchemes.currentIndex
         const length = colorSchemes.schemes.length
-        console.log(index, length)
+        const appEl = document.querySelector('#app')
+
+        // Turn off spinner if it's on
+        if (appEl.classList.contains('spinner')) {
+            toggleSpinner()
+        }
+
+        // Decide what buttons should be enabled
         if (index === 0 && length === 1) {
             picker.enableButton('btnForward', false)
             picker.enableButton('btnBack', false)
@@ -171,7 +209,6 @@ const Swatch = () => {
 
     const node = document.createElement('section')
     node.classList.add('section-swatches')
-   
 
     return {
         get,
