@@ -37,7 +37,7 @@ const Header = () => {
         const html = `
             <div class="header-wrapper">
                 <div>
-                    <img class="header-logo-img" src="/logo.png" alt="Color Cult logo, a circle containing a color swatch">
+                    <img class="header-logo-img" src="/logo.png" data-type="refresh" alt="Color Cult logo, a circle containing a color swatch">
                     <h1 class="header-logo" data-type="refresh">Color Cult</h1>
                 </div>
                 <div>
