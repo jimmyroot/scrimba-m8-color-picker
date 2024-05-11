@@ -17,6 +17,7 @@
         font-family: Oswald, sans-serif;
         text-transform: uppercase;
         cursor: pointer;
+        margin: 0;
     }
 
     .header-logo-img {
