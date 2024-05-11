@@ -76,7 +76,7 @@ This was probably the part of the project that took the longest. I knew I was ov
 - [~~https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy~~](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy)
 - [~~https://www.freecodecamp.org/news/javascript-proxy-object/~~](https://www.freecodecamp.org/news/javascript-proxy-object/)
 - [~~https://javascript.info/proxy~~](https://javascript.info/proxy)
-- [~~https://medium.com/sessionstack-blog/how-javascript-works-proxy-and-reflect-11748452c695](https://medium.com/sessionstack-blog/how-javascript-works-proxy-and-reflect-11748452c695) — this is a very long one that I mostly skimmed over to the relevant bits~~
+- [~~https://medium.com/sessionstack-blog/how-javascript-works-proxy-and-reflect-11748452c695~~](https://medium.com/sessionstack-blog/how-javascript-works-proxy-and-reflect-11748452c695) — ~~this is a very long one that I mostly skimmed over to the relevant bits~~
 - ~~and finally [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect)~~
 
 ~~Essentially, the proxy object, at least as I understand it, allows you to intercept the default internal functions of a Javascript object and perform some additional logic in between. I created a proxy with trap handlers for the ‘set’ and ‘get’ functions of my scheme object, which looks like this…,~~
