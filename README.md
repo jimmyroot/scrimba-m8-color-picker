@@ -10,7 +10,7 @@ This document is a bit of a jumble although I tried to keep some sense of order 
 
 First, here’s the ‘finished’ project in desktop and mobile guise.
 
-![color-cult-desktop.png](/images/).png)
+![color-cult-desktop.png](/images/color-cult-desktop.png)
 
 ![color-cult-mobile.png](/images/color-cult-mobile.png)
 
