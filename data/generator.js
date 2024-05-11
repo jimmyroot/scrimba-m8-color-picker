@@ -37,21 +37,25 @@ const Generator = () => {
         }
     }
 
-    const getColorById = async ( id = '390099' ) => {
+    // Get's a single color by it's ID
+    // Wrote this but didn't use it in the end, keeping it around
+    // as it might be useful in future...
 
-        const endpoint = `${basePath}id`
+    // const getColorById = async ( id = '390099' ) => {
 
-        try {
-            const query = `?hex=${id}&format=json`
-            const path = `${endpoint}${query}`
-            const options = {method: 'GET'}
-            const response = await fetch(path, options)
-            const color = await response.json()
-            return color
-        } catch (error) {
-            console.error('Error: ', error)
-        }
-    }
+    //     const endpoint = `${basePath}id`
+
+    //     try {
+    //         const query = `?hex=${id}&format=json`
+    //         const path = `${endpoint}${query}`
+    //         const options = {method: 'GET'}
+    //         const response = await fetch(path, options)
+    //         const color = await response.json()
+    //         return color
+    //     } catch (error) {
+    //         console.error('Error: ', error)
+    //     }
+    // }
 
     const getAlternativeSchemes = async scheme => {
         try {
@@ -72,7 +76,6 @@ const Generator = () => {
     return {
         getSchemeFromSeed,
         getSchemeFromPath,
-        getColorById,
         getAlternativeSchemes
     }
 }
