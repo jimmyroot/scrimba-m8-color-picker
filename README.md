@@ -238,7 +238,7 @@ In summary:
 - Heavy use of CSS nesting
 - Everything pretty much standard with media queries, except it was more of a ‘desktop first’ design, working back toward mobile
 
-# Re-factoring, Bugfixes
+## Re-factoring, Bugfixes
 
 ### Bugfixes
 
