@@ -1,6 +1,6 @@
 import { generator } from "../data/generator"
 import { PREFS } from "../utils/constants"
-import { isLowContrast, toggleSpinner } from "../utils/utils"
+import { toggleSpinner, scrollToTop } from "../utils/utils"
 import { picker } from "./picker"
 
 const Swatch = () => {
@@ -42,17 +42,7 @@ const Swatch = () => {
         const execute = {
             // Selecting a color from mini swatch previews
             select: async () => {
-                const { schemeData } = e.target.dataset
-                const [ mode, seed ] = schemeData.split(',')
-                const options = {
-                    'seed': seed,
-                    'mode': mode,
-                    'count': PREFS.count
-                }
-                toggleSpinner()
-                const newScheme = await generator.getSchemeFromSeed(options)
-                const altSchemes = await generator.getAlternativeSchemes(newScheme)
-                setScheme(newScheme, altSchemes)
+                handleAltSchemeClick(e.target.dataset)
             },
             // Like a color
             like: () => {
@@ -65,6 +55,23 @@ const Swatch = () => {
         }
         const { type } = e.target.dataset
         if (type && execute[type]) execute[type]()
+    }
+
+    const handleAltSchemeClick = async dataset => {
+        const { schemeData } = dataset
+        const [ mode, seed ] = schemeData.split(',')
+
+        const options = {
+            'seed': seed,
+            'mode': mode,
+            'count': PREFS.count
+        }
+
+        toggleSpinner() // Must happen before we start async fetch
+
+        const newScheme = await generator.getSchemeFromSeed(options)
+        const altSchemes = await generator.getAlternativeSchemes(newScheme)
+        setScheme(newScheme, altSchemes)
     }
 
     // Here we can manipulate the object in some way before passing it to the colorSchemes.new() function
@@ -121,7 +128,8 @@ const Swatch = () => {
             let html = `<section class="section-main-swatch">`
             html += colors.map(color => {
                 const colorHexValue = color.hex.value
-                const classSwatchTxt = isLowContrast(colorHexValue, 90) ? 'txt-dark' : ``
+                const contrast = color.contrast.value
+                const classSwatchTxt = contrast === '#000000' ? 'txt-dark' : ``
                 const swatchDescrValue = colorHexValue.replace(`#`, ``)
                 const swatchDescrName = color.name.value
                 const iconHeart = color.liked ? `<i class='bx bxs-heart bx-sm'></i>` : `<i class='bx bx-heart bx-sm'></i>`
@@ -182,12 +190,16 @@ const Swatch = () => {
     const refresh = () => {
         const index = colorSchemes.currentIndex
         const length = colorSchemes.schemes.length
+        const mode = colorSchemes.schemes[index].scheme.mode
         const appEl = document.querySelector('#app')
 
         // Turn off spinner if it's active
         if (appEl.classList.contains('spinner')) {
             toggleSpinner()
         }
+
+        // Set mode
+        picker.setModeValue(mode)
 
         // Decide what buttons should be enabled (fwd/bk)
         if (index === 0 && length === 1) {
@@ -203,6 +215,9 @@ const Swatch = () => {
             picker.enableButton('btnForward', true)
             picker.enableButton('btnBack', false)
         }
+
+        scrollToTop()
+
         node.innerHTML = render()
     }
 

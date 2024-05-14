@@ -59,7 +59,6 @@ const Picker = () => {
       }
 
       setPickerValue(`#${options.seed}`)
-      setModeValue(options.mode)
       setButtonColor(`#${options.seed}`)
 
       const initScheme = await generator.getSchemeFromSeed(options)
@@ -144,7 +143,8 @@ const Picker = () => {
     node.classList.add('picker-wrapper')
     return {
         get,
-        enableButton
+        enableButton,
+        setModeValue
     }
 }
 

@@ -8,11 +8,9 @@ Of course, I had a few extra ideas as I started to pull this one together which 
 
 This document is a bit of a jumble although I tried to keep some sense of order to it. I mainly talk about the design/thought process and how I solved a few issues that I came across as I developed the project…hopefully it’s helpful in some way, to someone!
 
-First, here’s the ‘finished’ project in desktop and mobile guise.
+First, here’s the ‘finished’ project:
 
 ![color-cult-desktop.png](/images/color-cult-desktop.png)
-
-![color-cult-mobile.png](/images/color-cult-mobile.png)
 
 ### Planning
 
@@ -76,7 +74,7 @@ This was probably the part of the project that took the longest. I knew I was ov
 - [~~https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy~~](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy)
 - [~~https://www.freecodecamp.org/news/javascript-proxy-object/~~](https://www.freecodecamp.org/news/javascript-proxy-object/)
 - [~~https://javascript.info/proxy~~](https://javascript.info/proxy)
-- [~~https://medium.com/sessionstack-blog/how-javascript-works-proxy-and-reflect-11748452c695~~](https://medium.com/sessionstack-blog/how-javascript-works-proxy-and-reflect-11748452c695) — ~~this is a very long one that I mostly skimmed over to the relevant bits~~
+- [~~https://medium.com/sessionstack-blog/how-javascript-works-proxy-and-reflect-11748452c695~~](https://medium.com/sessionstack-blog/how-javascript-works-proxy-and-reflect-11748452c695) ~~— this is a very long one that I mostly skimmed over to the relevant bits~~
 - ~~and finally [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect)~~
 
 ~~Essentially, the proxy object, at least as I understand it, allows you to intercept the default internal functions of a Javascript object and perform some additional logic in between. I created a proxy with trap handlers for the ‘set’ and ‘get’ functions of my scheme object, which looks like this…,~~
@@ -240,10 +238,32 @@ In summary:
 - Heavy use of CSS nesting
 - Everything pretty much standard with media queries, except it was more of a ‘desktop first’ design, working back toward mobile
 
-# Refactor, final bugs/tweaks
+# Re-factoring, Bugfixes
 
-Had a few little issues to sort out at the end, including but not limited to…
+### Bugfixes
 
-- Safari iPhone scroll (think this some odd Safari behaviour on iPhone)
+Had a few little issues to sort out at the end, I think this covers all of them…
+
+1. **In Safari desktop, the menu position gets messed up if you go down to mobile size and then back up to desktop.** I couldn’t find the cause, but I fixed it by removing an superfluous div container that was wrapping the menu
+    - **Takeaway:**  Be careful not to include superfluous html that isn’t performing any actual function, especially as layouts get more complex. Even this simple case resulted in unexpected/unpredictable behaviour, because it only breaks in Safari and no other browser.
+2. **Background is still interactive when burger menu is open.** Implemented a quick and dirty fix, created a new class called ‘no-click’ with `pointer-events: none;` configured. When the burger menu is open, we also append this class to the `main` element.
+    - **Takeaway:**  this is a good little utility class that can be toggled to quickly make entire sections of a page/app non-interactive
+3. **Burger menu doesn’t toggle when closing the menu by clicking on the page background.** This is because in the event listener that closes the menu in this context (background click) is not passing the correct element. In fact, it doesn’t need to pass the element at all as we can define it inside the `toggleHamburger()` function. So the issue is fixed by referencing the hamburger directly rather than with `e.target`.
+    - **Takeaway:**  Remember to re-factor properly, this was a lazy implementation of a function that I should of re-factored for readability/functionality.
+4. **Get Scheme button doubles in height just before mobile media query kicks in, as it gets compressed by a couple of pixels thus making the text wrap.** Added `white-space: nowrap;`to it’s class to prevent.
+    - **Takeaway:** use `white-space: nowrap;` to prevent unwanted text wrap
+5. **When clicking an alternative scheme in mobile view, the scheme can be obscured as the user has scrolled down to see the alt. schemes.** Added a function to scroll to the top of the window that can be called from anywhere. Because I had my main app div height set to 100vh, window.scrollTo({top: 0}) doesn’t work. Instead had to call it on the app div, so document.querySelector(’#app’).scrollTo().
+    - **Takeaway:** scrollTo can be called on different elements other than `window` or `document.body`, and watch out for how element height affects scrolling.
+6. **Safari iPhone scroll** (think this some odd Safari behaviour on iPhone), couldn’t find a fix and the issue doesn’t happen elsewhere
+    - **Takeaway**: Be aware of behaviours unique to each browser/environment
+
+### Refactors
+
 - Pulling messy code out of anonymous event listener callbacks and into standalone functions
 - Delete unwanted code, extra comments, etc, the usual stuff
+
+### Links
+
+- [Scrim](https://scrimba.com/scrim/cBQ7PVuJ)
+- [Netlify](https://jn-scrimba-m8-colorcult.netlify.app/)
+- [Github](https://github.com/jimmyroot/scrimba-m8-color-scheme-generator)

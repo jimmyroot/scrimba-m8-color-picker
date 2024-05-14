@@ -14,11 +14,16 @@ const Home = () => {
         return node
     }
 
+    const toggleEventDisable = () => {
+        node.classList.toggle('no-click')
+    }
+
     const node = document.createElement('main')
     node.classList.add('main')
 
     return {
-        get
+        get,
+        toggleEventDisable
     }
 }
 

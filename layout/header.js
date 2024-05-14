@@ -1,3 +1,5 @@
+import { home } from "../pages/home"
+
 const Header = () => {
 
     const registerEventListeners = () => {
@@ -11,7 +13,7 @@ const Header = () => {
             if (!e.target.closest('.header-menu') 
                 && menu.classList.contains('open') 
                 && e.target.id != 'hamburger')  { 
-                    toggleHamburger(e.target) 
+                    toggleHamburger() 
             }
         })
     }
@@ -19,7 +21,7 @@ const Header = () => {
     const handleClick = e => {
         const execute = {
             hamburger: () => {
-                toggleHamburger(e.target)
+                toggleHamburger()
             },
             refresh: () => {
                 location.reload()
@@ -29,8 +31,9 @@ const Header = () => {
         if (type && execute[type]) execute[type]()
     }
 
-    const toggleHamburger = target => {
-        target.classList.toggle('is-active')
+    const toggleHamburger = () => {
+        home.toggleEventDisable()
+        document.querySelector('#hamburger').classList.toggle('is-active')
         node.querySelector('.header-menu').classList.toggle('open')
     }
 

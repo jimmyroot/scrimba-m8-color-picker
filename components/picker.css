@@ -68,6 +68,7 @@
         border: 1px solid var(--divider);
         padding: .75em 1.5em;
         cursor: pointer;
+        white-space: nowrap;
 
         span {
             opacity: .95;

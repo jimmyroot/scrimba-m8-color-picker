@@ -79,10 +79,14 @@ const toggleSpinner = () => {
   const swatches = document.querySelector('.section-swatches')
   const app = document.querySelector('#app')
   if (swatches) swatches.classList.toggle('faded')
-  app.classList.toggle('spinner')
-  
-
-  
+  app.classList.toggle('spinner')  
 }
 
-export { randomHexVal, isLowContrast, toggleSpinner }
+const scrollToTop = () => {
+  document.querySelector('#app').scrollTo({
+    top: 0,
+    behaviour: 'smooth'
+  })
+}
+
+export { randomHexVal, isLowContrast, toggleSpinner, scrollToTop }
